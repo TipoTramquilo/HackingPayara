@@ -1,0 +1,48 @@
+-- 1. Crear la base de datos 'ecommerce_db' si no existe
+-- Se usa 'DROP DATABASE IF EXISTS' para facilitar la recreación durante el desarrollo/pruebas.
+-- Esto eliminará cualquier base de datos existente con el mismo nombre.
+DROP DATABASE IF EXISTS ecommerce_db;
+CREATE DATABASE ecommerce_db;
+
+-- 2. Conectarse a la nueva base de datos 'ecommerce_db'
+-- Para ejecutar el script completo, es mejor conectar directamente a 'ecommerce_db' o ejecutar en dos pasos.
+-- Alternativa: psql -U postgres -d ecommerce_db -f DBEcommerce.sql
+\connect ecommerce_db
+
+-- 3. Otorgar todos los privilegios al usuario 'postgres' sobre la base de datos 'ecommerce_db'
+GRANT ALL PRIVILEGES ON DATABASE ecommerce_db TO postgres;
+
+-- 4. Crear la tabla 'users'
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL, -- En una aplicación real, las contraseñas deben ser hasheadas (e.g., BCrypt)
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO users (username, email, password) VALUES
+('admin', 'admin@example.com', 'adminpass'),
+('testuser', 'test@example.com', 'password123'),
+('john_doe', 'john@example.com', 'securepass');
+
+-- 5. Crear la tabla 'products'
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255)
+);
+
+INSERT INTO products (name, description, price, image_url) VALUES
+('Laptop Pro X', 'Potencia y rendimiento para profesionales, con gráficos de última generación.', 1200.00, 'https://placehold.co/300x180/007bff/FFFFFF?text=Laptop'),
+('Smartphone G-Series', 'La última tecnología en tu mano, con cámara de alta resolución y batería duradera.', 800.00, 'https://placehold.co/300x180/28a745/FFFFFF?text=Smartphone'),
+('Auriculares SoundWave', 'Calidad de sonido inmersiva y cancelación de ruido para una experiencia única.', 150.00, 'https://placehold.co/300x180/ffc107/333333?text=Auriculares'),
+('Smartwatch Ultra', 'Mantente conectado y monitorea tu salud con estilo.', 250.00, 'https://placehold.co/300x180/dc3545/FFFFFF?text=Smartwatch'),
+('Monitor Curvo 4K', 'Experimenta la inmersión total con este monitor 4K curvo de 34 pulgadas.', 599.99, 'https://placehold.co/300x180/6c757d/FFFFFF?text=Monitor'),
+('Teclado Mecánico RGB', 'Teclado de alto rendimiento con switches mecánicos y retroiluminación RGB personalizable.', 89.99, 'https://placehold.co/300x180/4f007bff/FFFFFF?text=Teclado'),
+('Impresora 3D Avanzada', 'Crea modelos complejos con alta precisión.', 750.00, 'https://placehold.co/300x180/8d8d8d/FFFFFF?text=Impresora3D'),
+('Drone Explorer 2.0', 'Explora los cielos con este drone de cámara 4K y larga duración de vuelo.', 499.99, 'https://placehold.co/300x180/a1a1a1/FFFFFF?text=Drone'),
+('Consola de Juegos Retro', 'Revive los clásicos con esta consola retro que incluye cientos de juegos.', 129.99, 'https://placehold.co/300x180/e74c3c/FFFFFF?text=ConsolaRetro'),
+('Cámara Mirrorless Pro', 'Captura fotos y videos de calidad profesional.', 1100.00, 'https://placehold.co/300x180/f39c12/FFFFFF?text=Camara')ON CONFLICT (name) DO NOTHING;

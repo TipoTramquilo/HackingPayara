@@ -97,9 +97,9 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 7.  **Crear un JDBC Resource:**
     * Navega a **Resources** -> **JDBC** -> **JDBC Resources**.
     * Haz clic en **New...**
-    * **JNDI Name:** `jdbc/ecommerceDB` ¡Debe llamarse `jdbc/ecommerceDB`!
+    * **JNDI Name:** `jdbc/ecommerceDB` ❗❗❗Debe llamarse `jdbc/ecommerceDB`❗❗❗ DISCLAIMER: Muy importante porque no me sirvió una vez
     * **Pool Name:** Selecciona el pool que acabas de crear ej., `ecommercePool`.
-    * Haz clic en **OK`.
+    * Haz clic en OK`.
 8.  **Reiniciar el Dominio de Payara:**
     Después de configurar el JDBC Resource, es **crucial reiniciar el dominio** para que los cambios tomen efecto y la aplicación pueda usar el nuevo recurso.
     ```bash

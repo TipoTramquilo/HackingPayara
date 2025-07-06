@@ -13,7 +13,7 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 
 1.  **Clonar el repositorio `HackingPayara`:**
     ```bash
-    git clone https://github.com/TipoTramquilo/HackingPayara/](https://github.com/TipoTramquilo/HackingPayara/
+    git clone https://github.com/TipoTramquilo/HackingPayara/
     ```
 
 ### 1.2. Configuración de la Base de Datos `ecommerce`
@@ -58,7 +58,7 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 1.  **Descargar Payara 5:**
     Descarga el servidor Payara desde el siguiente enlace:
     ```bash
-    git clone https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip](https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip
+    git clone https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip
     ```
     Una vez descargado, descomprímelo en un lugar accesible, por ejemplo, en `/opt/`.
 

